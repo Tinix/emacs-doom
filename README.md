@@ -47,7 +47,7 @@ mv ~/.config/doom ~/.config/doom_backup
 ### 2.2 Clonar este repositorio en la carpeta de configuración de Doom
 
 ```bash
-git clone https://github.com/tu_usuario/emacs-doom-config.git ~/.config/doom
+git clone https://github.com/Tinix/emacs-doom.git ~/.config/doom
 ```
 
 ## 3. Sincronizar y compilar Doom Emacs

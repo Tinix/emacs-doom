@@ -1,8 +1,9 @@
 ;; Tema de Doom Emacs
-(setq doom-theme 'doom-opera)
+(setq doom-theme 'doom-zenburn);; doom-vibranr
 
 ;; Habilitar números de línea
-(setq display-line-numbers-type t)
+;; (setq display-line-numbers-type t)i ;; habitar con t
+(setq display-line-numbers-type nil)
 
 ;; Configurar directorio de Org
 (setq org-directory "~/org/")
@@ -19,18 +20,17 @@
 ;;   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-map))
 
 (after! evil
-  ;; Desactiva las combinaciones por defecto (j/k/l)
-  (map! :n "j" nil)
-  (map! :n "k" nil)
-  (map! :n "l" nil)
-  (map! :n "s" nil)
-
-(after! evil
+  ;; Desactiva las combinaciones por defecto (j/k/l/s)
+  (map! :n "j" nil
+        :n "k" nil
+        :n "l" nil
+        :n "s" nil)
+  
   ;; Asigna las nuevas teclas Dvorak para movimiento
-  (map! :n "h" #'evil-backward-char)   ; h → izquierda
-  (map! :n "t" #'evil-next-line)       ; t → abajo
-  (map! :n "n" #'evil-previous-line)   ; n → arriba
-  (map! :n "s" #'evil-forward-char)))
+  (map! :n "h" #'evil-backward-char    ; h → izquierda
+        :n "t" #'evil-next-line        ; t → abajo
+        :n "n" #'evil-previous-line    ; n → arriba
+        :n "s" #'evil-forward-char))   ; s → derecha
 
 ;; ;; Movimiento entre ventanas con Alt + h/l
 ;; (map! :g "M-w h" #'windmove-left)   ; Alt + h → ventana izquierda
@@ -118,6 +118,25 @@
     :desc "Move down" "t" #'treemacs-next-line
     :desc "Move up" "n" #'treemacs-previous-line))
 
+
+
+;; (setq-default mode-line-format
+;;    '("%e"
+;;      mode-line-front-space
+;;      mode-line-mule-info
+;;      mode-line-client
+;;      mode-line-modified
+;;      " "
+;;      mode-line-buffer-identification
+;;      "   "
+;;      mode-line-position
+;;      "  "
+;;      (:eval (format " [%s]" (upcase (symbol-name major-mode))))
+;;      "  | "
+;;      (:eval (system-name))
+;;      "  | Tinix "
+;;      "  | Emacs "))
+;;
 (setq-default mode-line-format
   '("%e"
     mode-line-front-space
@@ -129,8 +148,38 @@
     "   "
     mode-line-position
     "  "
-    (:eval (format " [%s]" (upcase (symbol-name major-mode)))) ;; Muestra el lenguaje
+    (:eval (format " [%s]" (upcase (symbol-name major-mode))))
     "  | "
-    (:eval (system-name)) ;; Muestra el nombre del sistema
+    (:eval (system-name))
     "  | Tinix "
-    "  | Emacs "))
+
+    ;; Git Branch (súper simple)
+    (:eval
+     (when (and vc-mode (buffer-file-name))
+       (if-let ((branch (car (vc-git-branches))))
+           (format "  | %s" branch)
+         "")))))
+
+
+;; Copy and Past
+(use-package! xclip
+  :config
+  (xclip-mode 1))
+
+;;Activar soporte para el mouse en Emacs
+(xterm-mouse-mode 1)  ;; Habilita el soporte del mouse en terminales
+(mouse-avoidance-mode 'animate)  ;; Hace que el cursor se mueva cuando el mouse lo toca
+
+;; Activar el soporte del mouse en GUI (si usas Emacs con interfaz gráfica)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . 1)))  ;; Configura el desplazamiento del ratón
+(setq mouse-wheel-progressive-speed nil)  ;; Desactiva la aceleración del ratón
+(setq mouse-visual-mode t)  ;; Permite ver las selecciones con el mouse
+
+;; Mejorar Treemacs activando el mouse
+(after! treemacs
+  (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
+
+;; Abrir treemacs en el dir actual
+(setq treemacs-display-in-side-window t)  ;; Muestra Treemacs en una ventana lateral
+(setq treemacs-show-hidden-files t)  ;; Muestra archivos ocultos
+(setq treemacs-follow-mode 1)  ;; Sigue el directorio actual del archivo
